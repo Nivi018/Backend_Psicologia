@@ -1,26 +1,30 @@
 const promise = require('bluebird');
-const options ={
-    promiseLib: promise,
-    query: (e) ={
 
+// Opciones de configuración para pg-promise
+const options = {
+    promiseLib: promise,
+    query: (e) => {
+        console.log('Consulta ejecutada:', e.query); // Agregar log de consultas ejecutadas
     }
-}
+};
 
 const pgp = require('pg-promise')(options);
-const types=  pgp.pg.types;
-types.setTypeParser(1114, function(stringValue){
-    return stringValue;
+const types = pgp.pg.types;
+
+// Solución para el tipo de dato TIMESTAMP (1114) en PostgreSQL
+types.setTypeParser(1114, function (stringValue) {
+    return stringValue; // Evitar que se convierta en objeto Date
 });
 
-/*Configuracion de la conexión con la base de datos */
-const dataBaseConfing={
-    'host': '127.0.0.1',
-    'port': 5432,
-    'database': 'Psicologia',
-    'user':'ivan',
-    'password': '12345'
-}
+// Configuración de la conexión a la base de datos
+const dataBaseConfig = {
+    host: '127.0.0.1',
+    port: 5432,
+    database: 'Psicologia',
+    user: 'ivan',
+    password: '12345'
+};
 
-const db = pgp(dataBaseConfing);
+const db = pgp(dataBaseConfig);
 
-module.exports= db;
+module.exports = db;

@@ -9,10 +9,12 @@
   "author": "manuel",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "pg-promise": "^11.6.0"
   }
