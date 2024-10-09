@@ -1,6 +1,6 @@
 const User = require("../models/user");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs"); // Importar bcrypt para encriptar contraseñas
 
 // Clave secreta para firmar los tokens JWT (usa una variable de entorno en producción)
 const secretKey =
@@ -15,7 +15,7 @@ module.exports = {
       console.log(`Usuarios: ${data}`);
       return res.status(200).json(data);
     } catch (error) {
-      console.error(`Error al obtener usuarios: ${error.stack}`); // Registro detallado del error
+      console.error(`Error al obtener usuarios: ${error.stack}`);
       return res.status(500).json({
         success: false,
         message: "Error al obtener los usuarios",
@@ -39,24 +39,24 @@ module.exports = {
       // Asignar rol por defecto 'user' si no se especifica
       user.role = user.role || "user";
 
-      // Encriptar la contraseña antes de almacenarla
-      user.password = await bcrypt.hash(user.password, 10);
-      console.log("Contraseña encriptada:", user.password); // Log para verificar la encriptación
+      // Encriptar la contraseña
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      console.log("Contraseña encriptada:", hashedPassword);
 
       // Crear el usuario en la base de datos
-      const data = await User.Create(user);
+      const data = await User.Create({ ...user, password: hashedPassword });
 
       return res.status(201).json({
         success: true,
         message: "Usuario creado con éxito",
-        data: data.id,
+        data: data.no_control, // Asegúrate de usar el campo correcto aquí
       });
     } catch (error) {
-      console.error(`Error al crear usuario: ${error.stack}`); // Registro detallado del error
+      console.error(`Error al crear usuario: ${error.stack}`);
       return res.status(500).json({
         success: false,
         message: "Error al crear el usuario",
-        error: error.message, // Incluir mensaje de error específico
+        error: error.message,
       });
     }
   },
@@ -65,7 +65,7 @@ module.exports = {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      console.log("Datos recibidos para login:", { email, password }); // Log de datos recibidos
+      console.log("Datos recibidos para login:", { email, password });
 
       // Verificar si el usuario existe en la base de datos
       const user = await User.getByEmail(email);
@@ -76,12 +76,12 @@ module.exports = {
           message: "Usuario no encontrado",
         });
       }
-      console.log("Usuario encontrado:", user); // Log del usuario encontrado
+      console.log("Usuario encontrado:", user);
 
-      // Comparar contraseñas
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      console.log("Contraseña ingresada:", `'${password}'`); // Usar comillas simples para asegurar que se imprima bien
-      console.log("Hash almacenado:", `'${user.password}'`);
+      // Comparar la contraseña ingresada con la almacenada (encriptada)
+      const isPasswordValid = await bcrypt.compare(password, user.password); // Comparar usando bcrypt
+      console.log("Contraseña ingresada:", `'${password}'`);
+      console.log("Contraseña almacenada:", `'${user.password}'`);
       console.log("Resultado de la comparación:", isPasswordValid);
 
       if (!isPasswordValid) {
@@ -94,22 +94,21 @@ module.exports = {
       // Generar token JWT con los datos del usuario
       const token = jwt.sign(
         { id: user.no_control, email: user.email, role: user.role },
-        secretKey, // Clave secreta para firmar el token
-        { expiresIn: "1h" } // El token expira en 1 hora
+        secretKey,
+        { expiresIn: "1h" }
       );
 
-      // Si el inicio de sesión es exitoso, devolver el token
       return res.status(200).json({
         success: true,
         message: "Inicio de sesión exitoso",
         token: token,
       });
     } catch (error) {
-      console.error(`Error al iniciar sesión: ${error.stack}`); // Registro detallado del error
+      console.error(`Error al iniciar sesión: ${error.stack}`);
       return res.status(500).json({
         success: false,
         message: "Error al iniciar sesión",
-        error: error.message, // Incluir mensaje de error específico
+        error: error.message,
       });
     }
   },

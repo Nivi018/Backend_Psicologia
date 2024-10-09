@@ -1,6 +1,5 @@
 const db = require('../config/config');
 
-
 const User = {};
 
 // Obtener todos los usuarios
@@ -10,11 +9,9 @@ User.getAll = () => {
 }
 
 // Crear un nuevo usuario
-const bcrypt = require('bcryptjs');
-
 User.Create = async (user) => {
-    const hashedPassword = await bcrypt.hash(user.password, 10); // Encriptar la contraseña
-
+    /**el problema estaba en esta parte, tu error fue que incritabas 2 veces tu contraseña,
+     *  ya que el la funcion register tambien se volvia a incriptar por esa razon no coincidian las contraseñas  */
     const sql = `
         INSERT INTO usuario (
             no_control,
@@ -36,10 +33,9 @@ User.Create = async (user) => {
         user.carrera,
         user.semestre,
         user.email,
-        hashedPassword // Almacenar la contraseña encriptada
+        user.password 
     ]);
 }
-
 
 // Obtener un usuario por email
 User.getByEmail = (email) => {
@@ -47,10 +43,9 @@ User.getByEmail = (email) => {
     return db.oneOrNone(sql, [email]);
 }
 
-// Comparar la contraseña proporcionada con la almacenada (hasheada)
+
 User.comparePassword = (inputPassword, storedPassword) => {
-    // Utilizamos bcrypt para comparar la contraseña hasheada
-    return bcrypt.compareSync(inputPassword, storedPassword);
+    return inputPassword === storedPassword; // Comparar directamente
 }
 
 module.exports = User;
