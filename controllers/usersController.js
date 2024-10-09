@@ -15,7 +15,7 @@ module.exports = {
       console.log(`Usuarios: ${data}`);
       return res.status(200).json(data);
     } catch (error) {
-      console.log(`Error: ${error}`);
+      console.error(`Error al obtener usuarios: ${error.stack}`); // Registro detallado del error
       return res.status(500).json({
         success: false,
         message: "Error al obtener los usuarios",
@@ -28,11 +28,20 @@ module.exports = {
     try {
       const user = req.body;
 
+      // Validar datos de entrada
+      if (!user.email || !user.password) {
+        return res.status(400).json({
+          success: false,
+          message: "Faltan campos requeridos: email y password",
+        });
+      }
+
       // Asignar rol por defecto 'user' si no se especifica
       user.role = user.role || "user";
 
       // Encriptar la contraseña antes de almacenarla
       user.password = await bcrypt.hash(user.password, 10);
+      console.log("Contraseña encriptada:", user.password); // Log para verificar la encriptación
 
       // Crear el usuario en la base de datos
       const data = await User.Create(user);
@@ -43,11 +52,11 @@ module.exports = {
         data: data.id,
       });
     } catch (error) {
-      console.log(`Error: ${error}`);
+      console.error(`Error al crear usuario: ${error.stack}`); // Registro detallado del error
       return res.status(500).json({
         success: false,
         message: "Error al crear el usuario",
-        error: error.message,
+        error: error.message, // Incluir mensaje de error específico
       });
     }
   },
@@ -60,19 +69,19 @@ module.exports = {
 
       // Verificar si el usuario existe en la base de datos
       const user = await User.getByEmail(email);
-      console.log("Usuario encontrado:", user); // Log del usuario encontrado
-
       if (!user) {
+        console.log("Usuario no encontrado");
         return res.status(404).json({
           success: false,
           message: "Usuario no encontrado",
         });
       }
+      console.log("Usuario encontrado:", user); // Log del usuario encontrado
 
+      // Comparar contraseñas
       const isPasswordValid = await bcrypt.compare(password, user.password);
-      console.log("Comparando contraseñas:");
-      console.log("Contraseña ingresada:", password); // Agregar comillas simples para asegurar que se imprima como string
-      console.log("Hash almacenado:", user.password); // Agregar comillas simples para asegurar que se imprima como string
+      console.log("Contraseña ingresada:", `'${password}'`); // Usar comillas simples para asegurar que se imprima bien
+      console.log("Hash almacenado:", `'${user.password}'`);
       console.log("Resultado de la comparación:", isPasswordValid);
 
       if (!isPasswordValid) {
@@ -96,11 +105,11 @@ module.exports = {
         token: token,
       });
     } catch (error) {
-      console.log(`Error: ${error}`);
+      console.error(`Error al iniciar sesión: ${error.stack}`); // Registro detallado del error
       return res.status(500).json({
         success: false,
         message: "Error al iniciar sesión",
-        error: error.message,
+        error: error.message, // Incluir mensaje de error específico
       });
     }
   },

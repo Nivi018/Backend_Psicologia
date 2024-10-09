@@ -18,11 +18,11 @@ types.setTypeParser(1114, function (stringValue) {
 
 // Configuración de la conexión a la base de datos
 const dataBaseConfig = {
-    host: '127.0.0.1',
-    port: 5432,
-    database: 'Psicologia',
-    user: 'ivan',
-    password: '12345'
+    host: 'aws-0-us-east-1.pooler.supabase.com',
+    port: 6543,
+    database: 'postgres',
+    user: 'postgres.njsmlhxnaulsuiqcysou',
+    password: 'FlJLroGkYcBoxM0K'
 };
 
 const db = pgp(dataBaseConfig);
