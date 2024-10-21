@@ -10,20 +10,19 @@ User.getAll = () => {
 
 // Crear un nuevo usuario
 User.Create = async (user) => {
-    /**el problema estaba en esta parte, tu error fue que incritabas 2 veces tu contraseña,
-     *  ya que el la funcion register tambien se volvia a incriptar por esa razon no coincidian las contraseñas  */
     const sql = `
         INSERT INTO usuario (
             no_control,
             nombre,
             apellido,
-            edad,
+            edad,   
             carrera,
             semestre,
             email,
-            password
+            password,
+            rol
         ) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING no_control`;
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING no_control`;
 
     return db.oneOrNone(sql, [
         user.no_control,
@@ -33,7 +32,8 @@ User.Create = async (user) => {
         user.carrera,
         user.semestre,
         user.email,
-        user.password 
+        user.password,
+        user.rol || 'usuario'  
     ]);
 }
 
@@ -43,9 +43,8 @@ User.getByEmail = (email) => {
     return db.oneOrNone(sql, [email]);
 }
 
-
 User.comparePassword = (inputPassword, storedPassword) => {
-    return inputPassword === storedPassword; // Comparar directamente
+    return inputPassword === storedPassword; 
 }
 
 module.exports = User;

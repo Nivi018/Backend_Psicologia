@@ -36,8 +36,8 @@ module.exports = {
         });
       }
 
-      // Asignar rol por defecto 'user' si no se especifica
-      user.role = user.role || "user";
+      // Asignar rol por defecto 'usuario' si no se especifica
+      user.rol = user.rol || "usuario";
 
       // Encriptar la contraseña
       const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -91,9 +91,9 @@ module.exports = {
         });
       }
 
-      // Generar token JWT con los datos del usuario
+      // Generar token JWT con los datos del usuario, incluyendo el rol
       const token = jwt.sign(
-        { id: user.no_control, email: user.email, role: user.role },
+        { id: user.no_control, email: user.email, rol: user.rol },
         secretKey,
         { expiresIn: "1h" }
       );
