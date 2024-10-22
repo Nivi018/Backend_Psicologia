@@ -32,6 +32,9 @@ INSERT INTO usuarios(
 
 /*
 
+
+
+
 CREATE TABLE usuario (
     no_control SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -47,5 +50,18 @@ CREATE TABLE usuario (
 altere la tabla para agregar el campo "rol"
 ALTER TABLE usuario
 ADD COLUMN rol VARCHAR(50) DEFAULT 'usuario';
+
+
+CREATE TABLE administradores (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    apellido VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+altere la tabla para agregar el campo "rol"
+ALTER TABLE administradores
+ADD COLUMN rol VARCHAR(50) DEFAULT 'administrador';
 
 */

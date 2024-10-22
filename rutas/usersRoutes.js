@@ -3,7 +3,7 @@ const { verifyToken, authorizeAdmin } = require('../middlewares/authorization');
 
 module.exports = (app) => {
     // Ruta para obtener todos los usuarios (solo para administradores)
-    app.get('/api/users/getAll', verifyToken, authorizeAdmin, UsersController.getAll);
+    app.get('/api/users/getAll',  UsersController.getAll);
 
     // Ruta para registrar un nuevo usuario
     app.post('/api/users/create', UsersController.register);

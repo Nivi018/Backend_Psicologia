@@ -9,6 +9,7 @@ const cors = require('cors');
 
 // Importar las rutas
 const users = require('./rutas/usersRoutes');
+const admin = require('./rutas/aminRoutes');
 
 // Importar middlewares
 const { verifyToken } = require('./middlewares/authorization');
@@ -26,6 +27,7 @@ const port = 3000;
 
 // Definir las rutas de usuario
 users(app); // Asigna las rutas de usuario
+admin(app);
 
 // Ruta raíz de prueba
 app.get('/', (req, res) => {
