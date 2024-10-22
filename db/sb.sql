@@ -64,4 +64,21 @@ altere la tabla para agregar el campo "rol"
 ALTER TABLE administradores
 ADD COLUMN rol VARCHAR(50) DEFAULT 'administrador';
 
+
+
+CREATE TABLE expediente (
+    id SERIAL PRIMARY KEY,                
+    no_control INT NOT NULL,              
+    sexo VARCHAR(10),                     
+    edad INT,                          
+    estado_civil VARCHAR(20),           
+    direccion VARCHAR(255),                
+    telefono VARCHAR(10),                 
+    ingenieria VARCHAR(100),              
+    modalidad VARCHAR(50),               
+    semestre INT,                          
+    fecha_registro DATE,                   
+    numero_sesiones INT,                   
+    FOREIGN KEY (no_control) REFERENCES usuario(no_control)  
+);
 */
