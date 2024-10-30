@@ -13,32 +13,22 @@ Expediente.create = async (expediente) => {
     const sql = `
         INSERT INTO expediente (
             no_control,
-            sexo,
-            edad,
-            estado_civil,
-            direccion,
-            telefono,
-            ingenieria,
-            modalidad,
-            semestre,
-            fecha_registro,
-            numero_sesiones
+            numero_sesiones,
+            Motivo_consulta,
+            Desencadenantes_motivo,
+            Plan_orientacion,
+            Seguimiento
         ) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
-        RETURNING id`;
+        VALUES ($1, $2, $3, $4, $5, $6) 
+        RETURNING no_control`;
 
     return db.oneOrNone(sql, [
         expediente.no_control,
-        expediente.sexo,
-        expediente.edad,
-        expediente.estado_civil,
-        expediente.direccion,
-        expediente.telefono,
-        expediente.ingenieria,
-        expediente.modalidad,
-        expediente.semestre,
-        expediente.fecha_registro,
-        expediente.numero_sesiones
+        expediente.numero_sesiones,
+        expediente.motivo_consulta,
+        expediente.desencadenantes_motivo,
+        expediente.plan_orientacion,
+        expediente.seguimiento
     ]);
 }
 
@@ -59,30 +49,20 @@ Expediente.update = async (id, expediente) => {
     const sql = `
         UPDATE expediente
         SET
-            sexo = $1,
-            edad = $2,
-            estado_civil = $3,
-            direccion = $4,
-            telefono = $5,
-            ingenieria = $6,
-            modalidad = $7,
-            semestre = $8,
-            fecha_registro = $9,
-            numero_sesiones = $10
-        WHERE id = $11 RETURNING *`;
+            numero_sesiones = $1,
+            Motivo_consulta = $2,
+            Desencadenantes_motivo = $3,
+            Plan_orientacion = $4,
+            Seguimiento = $5
+        WHERE id = $6 RETURNING *`;
 
     return db.oneOrNone(sql, [
-        expediente.sexo,
-        expediente.edad,
-        expediente.estado_civil,
-        expediente.direccion,
-        expediente.telefono,
-        expediente.ingenieria,
-        expediente.modalidad,
-        expediente.semestre,
-        expediente.fecha_registro,
         expediente.numero_sesiones,
-        id
+        expediente.motivo_consulta,
+        expediente.desencadenantes_motivo,
+        expediente.plan_orientacion,
+        expediente.seguimiento,
+        id  
     ]);
 }
 

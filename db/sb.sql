@@ -35,15 +35,21 @@ INSERT INTO usuarios(
 
 
 
-CREATE TABLE usuario (
+CREATE TABLE usuario (               
     no_control SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    apellido VARCHAR(100) NOT NULL,
-    edad INT,
-    carrera VARCHAR(100),
-    semestre INT,
+    nombre VARCHAR(100),   
+    apeliido VARCHAR(100),           
+    sexo VARCHAR(10),                     
+    edad INT,                          
+    estado_civil VARCHAR(20),           
+    direccion VARCHAR(255),                
+    telefono VARCHAR(10),                 
+    ingenieria VARCHAR(100),              
+    modalidad VARCHAR(50),               
+    semestre INT,                          
+    fecha_registro DATE,
     email VARCHAR(100) UNIQUE NOT NULL,  
-    password VARCHAR(255) NOT NULL    
+    password VARCHAR(255) NOT NULL                                           
 );
 
 
@@ -67,18 +73,13 @@ ADD COLUMN rol VARCHAR(50) DEFAULT 'administrador';
 
 
 CREATE TABLE expediente (
-    id SERIAL PRIMARY KEY,                
-    no_control INT NOT NULL,              
-    sexo VARCHAR(10),                     
-    edad INT,                          
-    estado_civil VARCHAR(20),           
-    direccion VARCHAR(255),                
-    telefono VARCHAR(10),                 
-    ingenieria VARCHAR(100),              
-    modalidad VARCHAR(50),               
-    semestre INT,                          
-    fecha_registro DATE,                   
-    numero_sesiones INT,                   
+    id SERIAL PRIMARY KEY,
+    no_control INT NOT NULL,                                   
+    numero_sesiones INT,
+    Motivo_consulta VARCHAR (255),
+    Desencadenantes_motivo VARCHAR (255),
+    Plan_orientacion VARCHAR (225),
+    Seguimiento VARCHAR (225),
     FOREIGN KEY (no_control) REFERENCES usuario(no_control)  
 );
 */

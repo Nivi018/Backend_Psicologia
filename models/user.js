@@ -15,22 +15,34 @@ User.Create = async (user) => {
             no_control,
             nombre,
             apellido,
-            edad,   
-            carrera,
+            sexo,
+            edad,
+            estado_civil,
+            direccion,
+            telefono,  
+            ingenieria,
+            modalidad,
             semestre,
+            fecha_registro,
             email,
             password,
             rol
         ) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING no_control`;
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING no_control`;
 
     return db.oneOrNone(sql, [
         user.no_control,
         user.nombre,
         user.apellido,
+        user.sexo,
         user.edad,
-        user.carrera,
+        user.estado_civil,
+        user.direccion,
+        user.telefono,
+        user.ingenieria,
+        user.modalidad,
         user.semestre,
+        user.fecha_registro,
         user.email,
         user.password,
         user.rol || 'usuario'  
