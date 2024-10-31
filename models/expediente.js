@@ -6,7 +6,7 @@ const Expediente = {};
 Expediente.getAll = () => {
     const sql = `SELECT * FROM expediente`;
     return db.manyOrNone(sql);
-}
+};
 
 // Crear un nuevo expediente
 Expediente.create = async (expediente) => {
@@ -30,19 +30,33 @@ Expediente.create = async (expediente) => {
         expediente.plan_orientacion,
         expediente.seguimiento
     ]);
-}
+};
 
-// Obtener un expediente por no_control
-Expediente.getByNoControl = (no_control) => {
-    const sql = `SELECT * FROM expediente WHERE no_control = $1`;
-    return db.oneOrNone(sql, [no_control]);
-}
+// Obtener información del usuario y expediente por no_control
+Expediente.getByNoControl = async (no_control) => {
+    const sqlUsuario = `SELECT * FROM usuario WHERE no_control = $1`;
+    const sqlExpediente = `SELECT * FROM expediente WHERE no_control = $1`;
+
+    try {
+        const usuario = await db.oneOrNone(sqlUsuario, [no_control]);
+        const expediente = await db.oneOrNone(sqlExpediente, [no_control]);
+
+        // Combina los datos del usuario y expediente
+        return {
+            usuario,
+            expediente
+        };
+    } catch (error) {
+        console.error('Error al obtener datos:', error);
+        throw error;
+    }
+};
 
 // Obtener todos los expedientes de un usuario específico
 Expediente.getByUserId = (no_control) => {
     const sql = `SELECT * FROM expediente WHERE no_control = $1`;
     return db.manyOrNone(sql, [no_control]);
-}
+};
 
 // Actualizar un expediente existente
 Expediente.update = async (id, expediente) => {
@@ -64,12 +78,12 @@ Expediente.update = async (id, expediente) => {
         expediente.seguimiento,
         id  
     ]);
-}
+};
 
 // Eliminar un expediente
 Expediente.delete = async (id) => {
     const sql = `DELETE FROM expediente WHERE id = $1 RETURNING *`;
     return db.oneOrNone(sql, [id]);
-}
+};
 
 module.exports = Expediente;
