@@ -1,20 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const expedienteController = require('../controllers/expedienteController');
-
-
-
+const expedienteController = require('../controllers/expedienteController');  // Asegúrate de que esta ruta sea correcta
 
 // Definir las rutas
-router.get('/getAllExpediente', expedienteController.getAllExpedientes); // http://localhost:3000/expediente/getAllExpediente
-router.post('/crearExpediente', expedienteController.createExpediente); //http://localhost:3000/api/expediente/crearExpediente
-// Ruta para obtener un expediente por número de control
-router.get('/getExpediente/:no_control', expedienteController.getExpedienteByNoControl); // http://localhost:3000/api/expediente/getExpediente/:no_control
+router.get('/getAllExpediente', expedienteController.getAllExpedientes); // Obtiene todos los expedientes
+router.post('/expedientes', expedienteController.createExpediente); // Crea un nuevo expediente
+router.get('/expedientes/:no_control', expedienteController.getExpedienteByNoControl);
+router.put('/expedienteUpdate/:id', expedienteController.updateExpediente);
+router.delete('/expedienteDelete/:id', expedienteController.deleteExpediente);
 
 // Exportar el router
-module.exports = (app) => {
-    app.use('/api/expediente', router); 
-    console.log("Rutas de expediente registradas");
-};
-
-
+module.exports = router;

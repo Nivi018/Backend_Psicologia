@@ -14,10 +14,10 @@ Expediente.create = async (expediente) => {
         INSERT INTO expediente (
             no_control,
             numero_sesiones,
-            Motivo_consulta,
-            Desencadenantes_motivo,
-            Plan_orientacion,
-            Seguimiento
+            motivo_consulta,
+            desencadenantes_motivo,
+            plan_orientacion,
+            seguimiento
         ) 
         VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING no_control`;
@@ -32,19 +32,27 @@ Expediente.create = async (expediente) => {
     ]);
 };
 
-// Obtener información del usuario y expediente por no_control
+/// Obtener la información del usuario y todos los expedientes por no_control
 Expediente.getByNoControl = async (no_control) => {
-    const sqlUsuario = `SELECT * FROM usuario WHERE no_control = $1`;
-    const sqlExpediente = `SELECT * FROM expediente WHERE no_control = $1`;
+    const sqlUsuario = `SELECT * FROM usuario WHERE no_control = $1`;  // Obtener datos del usuario
+    const sqlExpediente = `SELECT * FROM expediente WHERE no_control = $1`;  // Obtener los expedientes
 
     try {
+        // Obtener los datos del usuario
         const usuario = await db.oneOrNone(sqlUsuario, [no_control]);
-        const expediente = await db.oneOrNone(sqlExpediente, [no_control]);
 
-        // Combina los datos del usuario y expediente
+        // Obtener los expedientes asociados al usuario
+        const expedientes = await db.manyOrNone(sqlExpediente, [no_control]);
+
+        // Si el usuario no se encuentra, se lanza un error
+        if (!usuario) {
+            throw new Error('Usuario no encontrado');
+        }
+
+        // Combinar los datos del usuario y los expedientes en un solo objeto
         return {
             usuario,
-            expediente
+            expedientes
         };
     } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -52,7 +60,7 @@ Expediente.getByNoControl = async (no_control) => {
     }
 };
 
-// Obtener todos los expedientes de un usuario específico
+// Obtener todos los expedientes de un usuario específico (opcional, si ya tienes getByNoControl)
 Expediente.getByUserId = (no_control) => {
     const sql = `SELECT * FROM expediente WHERE no_control = $1`;
     return db.manyOrNone(sql, [no_control]);
@@ -64,10 +72,10 @@ Expediente.update = async (id, expediente) => {
         UPDATE expediente
         SET
             numero_sesiones = $1,
-            Motivo_consulta = $2,
-            Desencadenantes_motivo = $3,
-            Plan_orientacion = $4,
-            Seguimiento = $5
+            motivo_consulta = $2,
+            desencadenantes_motivo = $3,
+            plan_orientacion = $4,
+            seguimiento = $5
         WHERE id = $6 RETURNING *`;
 
     return db.oneOrNone(sql, [

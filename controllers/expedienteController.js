@@ -1,4 +1,4 @@
-const Expediente = require('../models/expediente');
+
 const expedienteModel = require('../models/expediente');
 const User = require('../models/user');
 
@@ -26,22 +26,63 @@ expedienteController.createExpediente = async (req, res) => {
     }
 };
 
-// Obtener un expediente y usuario por no_control
+// Obtener expedientes por número de control
 expedienteController.getExpedienteByNoControl = async (req, res) => {
     const noControl = req.params.no_control;
     try {
-        const data = await Expediente.getByNoControl(noControl);
-        if (data) {
-            res.status(200).json(data);
+        // Obtener los datos del usuario y los expedientes asociados al número de control
+        const { usuario, expedientes } = await expedienteModel.getByNoControl(noControl);
+        
+        if (usuario) {
+            res.status(200).json({
+                usuario,
+                expedientes
+            });
         } else {
-            res.status(404).json({ message: 'No se encontró el expediente' });
+            res.status(404).json({ message: 'Usuario no encontrado' });
         }
     } catch (error) {
-        console.error('Error al obtener expediente por no_control:', error);
-        res.status(500).json({ error: 'Error al obtener expediente' });
+        console.error('Error al obtener expedientes por no_control:', error);
+        res.status(500).json({ error: 'Error al obtener expedientes' });
     }
 };
 
+// Actualizar un expediente
+expedienteController.updateExpediente = async (req, res) => {
+    const { id } = req.params; // Obtener el ID del expediente desde los parámetros
+    const expedienteData = req.body; // Obtener los datos del expediente desde el cuerpo de la solicitud
 
+    try {
+        const expedienteActualizado = await expedienteModel.update(id, expedienteData);
 
+        if (expedienteActualizado) {
+            res.status(200).json(expedienteActualizado);
+        } else {
+            res.status(404).json({ message: 'Expediente no encontrado' });
+        }
+    } catch (error) {
+        console.error('Error al actualizar el expediente:', error);
+        res.status(500).json({ message: 'Error al actualizar el expediente' });
+    }
+};
+
+// Eliminar un expediente
+expedienteController.deleteExpediente = async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const expedienteEliminado = await expedienteModel.delete(id);
+
+        if (expedienteEliminado) {
+            res.status(200).json({
+                message: 'Expediente eliminado correctamente',
+                expedienteEliminado
+            });
+        } else {
+            res.status(404).json({ message: 'Expediente no encontrado' });
+        }
+    } catch (error) {
+        console.error('Error al eliminar el expediente:', error);
+        res.status(500).json({ message: 'Error al eliminar el expediente' });
+    }
+};
 module.exports = expedienteController;
