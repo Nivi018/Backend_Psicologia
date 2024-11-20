@@ -1,13 +1,15 @@
+const express = require('express');
+const router = express.Router();
 const AdminController = require('../controllers/adminController');
-const {verifyToken, authorizeAdmin} = require = require('../middlewares/authorization')
+const { verifyToken, authorizeAdmin } = require('../middlewares/authorization');
 
-module.exports =  (app) =>{
-   // Ruta para obtener todos los usuarios (solo para administradores)
-   app.get('/api/admin/getAllAdmin',  AdminController.getAllAdmin);
+// Ruta para obtener todos los usuarios (solo para administradores)
+router.get('/getAllAdmin', AdminController.getAllAdmin);
 
-   // Ruta para registrar un nuevo usuario
-   app.post('/api/admin/createAdmin', AdminController.registerAdmin);
+// Ruta para registrar un nuevo usuario
+router.post('/createAdmin', AdminController.registerAdmin);
 
-   // Ruta para iniciar sesión
-   app.post('/api/admin/loginAdmin', AdminController.loginAdmin);
-};
+// Ruta para iniciar sesión
+router.post('/loginAdmin', AdminController.loginAdmin);
+
+module.exports = router;
