@@ -10,6 +10,7 @@ const cors = require('cors');
 const users = require('./rutas/usersRoutes');
 const admin = require('./rutas/aminRoutes');
 const expediente = require('./rutas/expedienteRutas');
+const agenda = require('./rutas/agendaRutas');
 
 // Importar middlewares
 const { verifyToken } = require('./middlewares/authorization');
@@ -29,6 +30,7 @@ const port = 3000;
 app.use('/api/users', users);
 app.use('/api/admin', admin);
 app.use('/api/expediente', expediente);
+app.use('/api/agenda', agenda)
 
 // Ruta raíz de prueba
 app.get('/', (req, res) => {

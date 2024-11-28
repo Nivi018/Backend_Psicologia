@@ -55,6 +55,12 @@ User.getByEmail = (email) => {
     return db.oneOrNone(sql, [email]);
 }
 
+// Obtener un usuario por no_control
+User.getById = (id) => {
+    const sql = `SELECT * FROM usuario WHERE no_control = $1`;
+    return db.oneOrNone(sql, [id]);
+};
+
 User.comparePassword = (inputPassword, storedPassword) => {
     return inputPassword === storedPassword; 
 }

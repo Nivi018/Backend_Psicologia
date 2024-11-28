@@ -112,4 +112,33 @@ module.exports = {
       });
     }
   },
+
+// Obtener datos del usuario autenticado
+async getUserData(req, res, next) {
+  try {
+    // Los datos del usuario ya están disponibles en req.user gracias al middleware verifyToken
+    const { id, rol } = req.user;
+
+    // Puedes realizar una consulta adicional a la base de datos si necesitas más detalles del usuario
+    const user = await User.getById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+    }
+
+    // Responder con los datos necesarios
+    return res.status(200).json({
+      success: true,
+      no_control: user.no_control,
+      rol: user.rol,
+      email: user.email,
+    });
+  } catch (error) {
+    console.error(`Error al obtener datos del usuario: ${error.stack}`);
+    return res.status(500).json({
+      success: false,
+      message: "Error al obtener datos del usuario",
+      error: error.message,
+    });
+  }
+},
 };
