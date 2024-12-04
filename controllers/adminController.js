@@ -104,4 +104,43 @@ module.exports = {
       });
     }
   },
+
+// Obtener datos del administrador autenticado
+async getAdminData  (req, res, next) {
+  try {
+      const { id, rol } = req.user;
+
+      // Asegurarse de que sea un administrador
+      if (rol !== 'admin') {
+          return res.status(403).json({
+              success: false,
+              message: "No tiene permisos para acceder a esta información",
+          });
+      }
+
+      // Obtener los detalles del administrador por id
+      const admin = await Admin.getById(id);
+      if (!admin) {
+          return res.status(404).json({
+              success: false,
+              message: "Administrador no encontrado",
+          });
+      }
+
+      return res.status(200).json({
+          success: true,
+          id: admin.id,
+          no_control: admin.no_control,
+          rol: 'admin',
+          email: admin.email,
+      });
+  } catch (error) {
+      console.error(`Error al obtener datos del administrador: ${error.stack}`);
+      return res.status(500).json({
+          success: false,
+          message: "Error al obtener datos del administrador",
+          error: error.message,
+      });
+  }
+},
 };

@@ -12,17 +12,19 @@ Agenda.getAll = () => {
 Agenda.create = async (event) => {
     const sql = `
         INSERT INTO agenda (
-            no_control,
+            no_control_user,
+            no_control_admin,
             title,
             session_number,
             start_time,
             end_time   
         ) 
-        VALUES ($1, $2, $3, $4, $5) 
+        VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING id`;
 
     return db.oneOrNone(sql, [
-        event.no_control,
+        event.no_control_user,
+        event.no_control_admin,
         event.title,
         event.session_number,
         event.start_time,
@@ -33,7 +35,7 @@ Agenda.create = async (event) => {
 
 // Obtener eventos de un usuario específico por no_control
 Agenda.getByNoControl = (no_control) => {
-    const sql = `SELECT * FROM agenda WHERE no_control = $1`;
+    const sql = `SELECT * FROM agenda WHERE no_control_user = $1`;
     return db.manyOrNone(sql, [no_control]);
 };
 

@@ -12,4 +12,7 @@ router.post('/createAdmin', AdminController.registerAdmin);
 // Ruta para iniciar sesión
 router.post('/loginAdmin', AdminController.loginAdmin);
 
+ // Nueva ruta para obtener los datos del usuario autenticado
+ router.get('/getAdminData', verifyToken, AdminController.getAdminData);
+
 module.exports = router;

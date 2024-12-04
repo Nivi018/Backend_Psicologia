@@ -59,6 +59,7 @@ VALUES (
  
  CREATE TABLE administradores (
  id SERIAL PRIMARY KEY,
+ no_control SERIAL UNIQUE,
  nombre VARCHAR(255) NOT NULL,
  apellido VARCHAR(255) NOT NULL,
  email VARCHAR(255) UNIQUE NOT NULL,
@@ -83,14 +84,17 @@ VALUES (
  );
  
  crear la tabla agenda 
- CREATE TABLE agenda (
- id SERIAL PRIMARY KEY,
- no_control INTEGER NOT NULL, -- Cambiado a INTEGER para que coincida con la tabla usuario
- title VARCHAR(255) NOT NULL,
- session_number INT NOT NULL,
- start_time TIMESTAMP NOT NULL, -- Le quite el NOT NULL
- end_time TIMESTAMP NOT NULL  -- Le quite el NOT NULL
- FOREIGN KEY (no_control) REFERENCES usuario(no_control) ON DELETE CASCADE
- );
+CREATE TABLE agenda (
+    id SERIAL PRIMARY KEY,
+    no_control_user INTEGER,
+    no_control_admin INTEGER,
+    title VARCHAR(255) NOT NULL,
+    session_number INT NOT NULL,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    CONSTRAINT fk_no_control_user FOREIGN KEY (no_control_user) REFERENCES usuario(no_control) ON DELETE CASCADE,
+    CONSTRAINT fk_no_control_admin FOREIGN KEY (no_control_admin) REFERENCES administradores(no_control) ON DELETE CASCADE
+);
+
  
  */

@@ -14,15 +14,17 @@ Admin.getAll = () => {
 Admin.Create = async (admin) => {
     const sql = `
 INSERT INTO administradores (
+    no_control,
     nombre,
     apellido,
     email,
     password
 ) 
-VALUES ($1, $2, $3, $4) RETURNING id`;
+VALUES ($1, $2, $3, $4, $5) RETURNING id`;
 
     try {
         return await db.oneOrNone(sql, [
+            admin.no_control,
             admin.nombre,
             admin.apellido,
             admin.email,
@@ -39,6 +41,12 @@ Admin.getByEmail = (email) => {
     const sql = `SELECT * FROM administradores WHERE email = $1`;
     return db.oneOrNone(sql, [email]);
 }
+
+// Obtener un administrador por no_control
+Admin.getById = (id) => {
+    const sql = `SELECT * FROM administradores WHERE id = $1`;
+    return db.oneOrNone(sql, [id]);
+};
 
 Admin.comparePassword = (inputPassword, storedPassword) => {
     return bcrypt.compareSync(inputPassword, storedPassword); 
