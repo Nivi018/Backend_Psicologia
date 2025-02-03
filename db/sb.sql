@@ -88,10 +88,11 @@ CREATE TABLE agenda (
     id SERIAL PRIMARY KEY,
     no_control_user INTEGER,
     no_control_admin INTEGER,
-    title VARCHAR(255) NOT NULL,
+    title VARCHAR(50) NOT NULL,
     session_number INT NOT NULL,
     start_time TIMESTAMP,
     end_time TIMESTAMP,
+    estatus VARCHAR(100),
     CONSTRAINT fk_no_control_user FOREIGN KEY (no_control_user) REFERENCES usuario(no_control) ON DELETE CASCADE,
     CONSTRAINT fk_no_control_admin FOREIGN KEY (no_control_admin) REFERENCES administradores(no_control) ON DELETE CASCADE
 );

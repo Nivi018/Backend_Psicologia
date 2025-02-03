@@ -17,9 +17,10 @@ Agenda.create = async (event) => {
             title,
             session_number,
             start_time,
-            end_time   
+            end_time,
+            estatus   
         ) 
-        VALUES ($1, $2, $3, $4, $5, $6) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) 
         RETURNING id`;
 
     return db.oneOrNone(sql, [
@@ -28,7 +29,9 @@ Agenda.create = async (event) => {
         event.title,
         event.session_number,
         event.start_time,
-        event.end_time 
+        event.end_time,
+        event.status
+
         
     ]);
 };
@@ -47,14 +50,16 @@ Agenda.update = async (id, event) => {
             title = $1,
             session_number = $2,
             start_time = $3,
-            end_time = $4
-        WHERE id = $5 RETURNING *`;
+            end_time = $4,
+            estatus = $5
+        WHERE id = $6 RETURNING *`;
 
     return db.oneOrNone(sql, [
         event.title,
         event.session_number,
         event.start_time,
         event.end_time,
+        event.status,
         id  
     ]);
 };
