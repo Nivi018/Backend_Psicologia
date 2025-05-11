@@ -12,6 +12,11 @@ const admin = require('./rutas/aminRoutes');
 const expediente = require('./rutas/expedienteRutas');
 const agenda = require('./rutas/agendaRutas');
 
+// Ruta raíz de prueba
+app.get('/', (req, res) => {
+    res.send('Holaaaa Ruta raíz del backend');
+});
+
 // Importar middlewares
 const { verifyToken } = require('./middlewares/authorization');
 
